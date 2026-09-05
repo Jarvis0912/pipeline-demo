@@ -1,1 +1,1 @@
-pipeline demo
+pipeline demo with scm
