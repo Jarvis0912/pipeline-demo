@@ -1,51 +1,28 @@
 pipeline {
     agent any
 
-    options {
-        timeout(time: 1, unit: 'HOURS')
-        ansiColor('xterm')
-    }
-
     stages {
-        stage('Initialize') {
+        stage('Checkout') {
             steps {
-                echo 'Checking workspace and runner info...'
-                sh '''
-                    echo "Current directory: $(pwd)"
-                    echo "User: $(whoami)"
-                    echo "Hostname: $(hostname)"
-                '''
+                // Automatically pulls the GitHub repository configured in your Jenkins job
+                checkout scm
             }
         }
 
-        stage('Execute Tasks') {
+        stage('Build') {
             steps {
-                echo 'Running primary script steps...'
-                sh '''
-                    echo "Starting execution..."
-                    # Put your custom shell commands or script calls here:
-                    # python3 script.py
-                    # ./run.sh
-                '''
+                echo 'Building repository contents...'
+                // Verify files were pulled successfully
+                sh 'ls -la' 
             }
         }
 
-        stage('Reporting') {
+        stage('Deploy') {
             steps {
-                echo 'Generating logs and wrapping up...'
+                echo 'Executing deployment steps...'
+                // Replace with your actual deployment script
+                // sh './deploy.sh' 
             }
-        }
-    }
-
-    post {
-        always {
-            cleanWs()
-        }
-        success {
-            echo 'Pipeline finished with status: SUCCESS'
-        }
-        failure {
-            echo 'Pipeline finished with status: FAILURE'
         }
     }
 }
